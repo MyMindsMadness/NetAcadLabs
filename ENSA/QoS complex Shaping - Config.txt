@@ -1,0 +1,42 @@
+ip access-list standard SERVER-SHAPE-ACL
+     permit 192.168.255.0 0.0.0.255
+class-map  HIGH-PRI-TRAFFIC
+     match access-group name SERVER-SHAPE-ACL
+     exit
+ip access-list standard STAFF-SHAPE-ACL
+     permit 192.168.255.0 0.0.0.255
+class-map  MEDIUM-PRI-TRAFFIC
+     match access-group name STAFF-SHAPE-ACL
+     exit
+
+policy-map PRECEDENCE-POLICY
+     class HIGH-PRI-TRAFFIC
+          set precedence 5
+          exit
+     class MEDIUM-PRI-TRAFFIC
+          set precedence 1
+          exit
+     exit
+###################################################
+interface g0/0/0.100
+     service-policy input/output PRECEDENCE-POLICY
+     exit
+interface g0/0/0.255
+     service-policy input/output PRECEDENCE-POLICY
+     exit
+###################################################
+class-map  MATCH5-HP
+     match precedence 5
+	 exit
+class-map  MATCH1-MP
+     match precedence 1
+	 exit
+
+policy-map SHAPE-POLICY
+     class MATCH5-HP
+          priority percent 70
+          exit
+	 class MATCH1-MP
+          priority percent 5
+          exit
+     exit

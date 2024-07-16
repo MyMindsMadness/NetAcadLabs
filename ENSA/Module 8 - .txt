@@ -1,0 +1,27 @@
+ip local pool POOLVPN 10.0.0.200 10.0.0.220
+aaa new-model
+aaa authentication login VPNUSERS local
+aaa authorization network VPNGROUP local
+user IAN secret VPNPASS
+crypto isakmp policy 100
+	encryption aes 256
+	hash sha
+	authentication pre-share
+	group 5
+	lifetime 3600
+	exit
+crypto isakmp client configuration group VPNGROUP
+	key VPNGROUPKEY
+	pool POOLVPN
+	exit
+crypto ipsec transform-set VPNSET esp-aes esp-sha-hmac
+crypto dynamic-map VPNDYNMAP 100
+	set transform-set VPNSET
+	reverse-route
+	exit
+crypto map STATICMAP client configuration address respond
+crypto map STATICMAP client authentication list VPNUSERS
+crypto map STATICMAP Isakmp authorization list VPNGROUP
+crypto map STATICMAP 20 ipsec-isakmp dynamic VPNDYNMAP
+int g0/0/1
+	crypto map STATICMAP

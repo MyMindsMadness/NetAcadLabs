@@ -1,0 +1,38 @@
+R1
+ip access-list extended INTERESTING-192-TRAFFIC
+	permit ip 192.168.0.0 0.0.0.255 10.0.0.0 0.0.0.255
+crypto isakmp policy 10
+	encryption aes 256
+	authentication pre-share
+	group 5
+	exit
+crypto isakmp key S2SVPNKEY address 209.165.255.2
+#encapuslating security payload#
+crypto ipsec transform-set ENT-CAM esp-aes 256 esp-sha-hmac
+crypto map CORP-MAP 10 ipsec-isakmp
+	set peer 209.165.255.2
+	set pfs group5
+	set security-association lifetime seconds 43200
+	set transform-set ENT-CAM
+	match address INTERESTING-192-TRAFFIC
+int g0/0/2
+	crypto map CORP-MAP
+
+R2
+ip access-list extended INTERESTING-10-TRAFFIC
+	permit ip 10.0.0.0 0.0.0.255 192.168.0.0 0.0.0.255
+crypto isakmp policy 10
+	encryption aes 256
+	authentication pre-share
+	group 5
+	exit
+crypto isakmp key S2SVPNKEY address 209.165.200.2
+crypto ipsec transform-set CAM-ENT esp-aes 256 esp-sha-hmac
+crypto map CORP-MAP 10 ipsec-isakmp
+	set peer 209.165.200.2
+	set pfs group5
+	set security-association lifetime seconds 43200
+	set transform-set CAM-ENT
+	match address INTERESTING-10-TRAFFIC
+int g0/0/1
+	crypto map CORP-MAP
