@@ -1,10 +1,10 @@
 These Labs go hand in hand with the the private youtube playlists. 
 
-ITN 
-https://www.youtube.com/playlist?list=PLbQtb1SH-yhLz9_fxkiMzLZLTLfdWIwHB 
+   - ITN 
+   - SWRE
+   - ENSA
 
-SWRE
-https://www.youtube.com/playlist?list=PLbQtb1SH-yhKm8TAwJ1YwDesH-DMNSeQx
+These labs are designed to teach concepts or to help learn configuration. 
+These are not the labs found within the NetAcad course. Rather labs i have developed as my time as a Netacad instructor during Covid era. 
 
-ENSA
-https://www.youtube.com/playlist?list=PLbQtb1SH-yhIq9le3hKb4zsdXTBQ-5OZM
+
